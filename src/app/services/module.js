@@ -1,0 +1,1 @@
+angular.module('pd-ya.service', ['ngSanitize']);

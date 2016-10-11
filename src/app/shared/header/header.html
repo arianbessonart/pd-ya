@@ -1,0 +1,18 @@
+<md-toolbar class="md-primary" ng-controller="headerCtrl as header">
+	<div class="md-toolbar-tools">
+		<h2>
+		<span>Pedidos Ya</span>
+		</h2>
+        <md-button ui-sref="home">
+            Home
+        </md-button>
+        <md-button ui-sref="map">
+            Map
+        </md-button>
+		<span flex></span>
+        <h2>Hi {{header.displayName}}!</h2>
+		<md-button ng-click="header.logout()">
+			Logout
+		</md-button>
+	</div>
+</md-toolbar>

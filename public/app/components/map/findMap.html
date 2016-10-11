@@ -1,0 +1,66 @@
+<div ui-view='header'></div>
+<div ng-controller="findMapCtrl as fmap" ng-cloak class="md-padding" layout="row">
+    <div flex="33">
+        <form name="clientPoint" ng-submit="fmap.findPlaces(fmap.point)">
+            <div class="group">
+                <md-card>
+                    <md-card-content>
+                        <div layout="row">
+                            <md-input-container class="md-block">
+                                <label>Point</label>
+                                <input required type="text" name="point" ng-model="fmap.point" ng-pattern="/^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/" />
+                                <div ng-messages="clientPoint.point.$error" role="alert">
+                                    <div ng-message-exp="['required', 'pattern']">
+                                        Please enter a valid coordinate (i.e: -34.92,-56.15)
+                                    </div>
+                                </div>
+                            </md-input-container>
+                        </div>
+                        <div layout="row">
+                            <md-button class="md-raised md-primary" type="submit">Find</md-button>
+                        </div>
+                    </md-card-content>
+                </md-card>
+            </div>
+        </form>
+    </div>
+    <div flex="66">
+        <ng-map zoom="{{fmap.zoom}}" center="{{fmap.center}}" default-style="true">
+            <marker on-click="map.showInfoWindow('currentInfoWindow')" animation="Animation.BOUNCE" position="[{{fmap.center[0]}}, {{fmap.center[1]}}]">
+                <info-window id="currentInfoWindow"> <b>Current point</b></info-window>
+            </marker>
+            <marker on-click="map.showInfoWindow(r.id)" position="[{{r.coordinateX}}, {{r.coordinateY}}]" ng-repeat="r in fmap.restaurants">
+                <info-window id="{{r.id}}"><b>{{r.name}}</b></info-window>
+            </marker>
+        </ng-map>
+        <md-card>
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">Restaurants</span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content ng-show="fmap.restaurants">
+                <md-list flex>
+                    <md-list-item class="md-3-line" ng-repeat="item in fmap.restaurants">
+                        <md-card style="width: 100%">
+                            <md-card-content>
+                                <img ng-src="{{item.logoUrl}}" style="width: 75px; height: 75px" />
+                                <div class="md-list-item-text" layout="column">
+                                    <h3>{{ item.name }}</h3>
+                                    <h4>Categories: {{ item.topCategories }}</h4>
+                                    <h4>Rating: {{ item.ratingScore }}</h4>
+                                    <h4>Minimum delivery time minutes: {{ item.deliveryTimeMinMinutes }}</h4>
+                                </div>
+                                <md-button class="md-raised md-primary" ng-click="fmap.goTo(item.profileUrl)">Profile</md-button>
+                            </md-card-content>
+                        </md-card>
+                    </md-list-item>
+                </md-list>
+                <cl-paging ng-show="fmap.restaurants.length" flex cl-pages="fmap.pages" cl-steps="4" cl-page-changed="fmap.onPageChanged()" cl-align="center center" cl-current-page="fmap.currentPage"></cl-paging>
+            </md-card-content>
+            <md-card-content ng-show="fmap.loading">
+                <md-progress-circular md-diameter="25" layout-align="center center" md-mode="indeterminate"></md-progress-circular>
+            </md-card-content>
+        </md-card>
+    </div>
+</div>

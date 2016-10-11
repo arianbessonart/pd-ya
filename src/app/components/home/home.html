@@ -1,0 +1,58 @@
+<div ui-view='header'></div>
+<div ng-controller="homeCtrl as home" ng-cloak class="md-padding" layout="row">
+    <div flex="33">
+        <form name="clientPoint" ng-submit="home.findPlaces(point)">
+            <div class="group">
+                <md-card>
+                    <md-card-content>
+                        <div layout="row">
+                            <md-input-container class="md-block">
+                                <label>Point</label>
+                                <input required type="text" name="point" ng-model="point" ng-pattern="/^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/" />
+                                <div ng-messages="clientPoint.point.$error" role="alert">
+                                    <div ng-message-exp="['required', 'pattern']">
+                                        Please enter a valid coordinate (i.e: -34.92,-56.15)
+                                    </div>
+                                </div>
+                            </md-input-container>
+                        </div>
+                        <div layout="row">
+                            <md-button class="md-raised md-primary" type="submit">Find</md-button>
+                        </div>
+                    </md-card-content>
+                </md-card>
+            </div>
+        </form>
+    </div>
+    <div flex="66">
+        <md-card>
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">Restaurants</span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content ng-show="home.restaurants">
+                <md-list flex>
+                    <md-list-item class="md-3-line" ng-repeat="item in home.restaurants">
+                        <md-card style="width: 100%">
+                            <md-card-content>
+                                <img ng-src="{{item.logoUrl}}" style="width: 75px; height: 75px" />
+                                <div class="md-list-item-text" layout="column">
+                                    <h3>{{ item.name }}</h3>
+                                    <h4>Categories: {{ item.topCategories }}</h4>
+                                    <h4>Rating: {{ item.ratingScore }}</h4>
+                                    <h4>Minimum delivery time minutes: {{ item.deliveryTimeMinMinutes }}</h4>
+                                </div>
+                                <md-button class="md-raised md-primary" ng-click="home.goTo(item.profileUrl)">Profile</md-button>
+                            </md-card-content>
+                        </md-card>
+                    </md-list-item>
+                </md-list>
+                <cl-paging ng-show="home.restaurants.length" flex cl-pages="home.pages" cl-steps="4" cl-page-changed="home.onPageChanged()" cl-align="center center" cl-current-page="home.currentPage"></cl-paging>
+            </md-card-content>
+            <md-card-content ng-show="home.loading">
+                <md-progress-circular md-diameter="25" layout-align="center center" md-mode="indeterminate"></md-progress-circular>
+            </md-card-content>
+        </md-card>
+    </div>
+</div>

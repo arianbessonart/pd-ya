@@ -1,0 +1,32 @@
+<div ng-controller="loginCtrl as login" style="padding-top: 5%" layout="column" layout-align="center center">
+    <div flex>
+        <form name="clientLogin" ng-submit="login.login()">
+            <div class="group">
+                <md-input-container class="md-block">
+                    <label>Client Email</label>
+                    <input required type="email" name="clientEmail" ng-model="login.username"
+                           minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" />
+
+                    <div ng-messages="clientLogin.username.$error" role="alert">
+                        <div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
+                            Your email must be look like an e-mail address.
+                        </div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container class="md-block">
+                    <label>Password</label>
+                    <input required type="password" name="password" ng-model="login.password" />
+
+                    <div ng-messages="clientLogin.username.$error" role="alert">
+                        <div ng-message-exp="['required']">
+                            Your password is required
+                        </div>
+                    </div>
+                </md-input-container>
+            </div>
+            <md-button class="md-raised md-primary" type="submit">Login</md-button>
+        </form>
+    </div>
+
+</div>
